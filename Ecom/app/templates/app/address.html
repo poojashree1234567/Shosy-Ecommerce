@@ -1,0 +1,46 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Buy Now{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+ <h3>Welcome <span class="text-capitalize">{{request.user}}</span></h3>
+  <div class="col-sm-2 border-end">
+   <ul class="list-unstyled">
+    <li class="d-grid"><a href="{% url 'profile' %}" class="btn">Profile</a></li>
+    <li class="d-grid"><a href="{% url 'address' %}" class="btn {{active}}">Address</a></li>
+   </ul>
+  </div>
+  <div class="col-sm-9 offset-sm-1">
+{% if address %}
+   <div class="row">
+    {% for ad in address %}
+    <div class="col-sm-6 position-relative">
+     <div class="card">
+      <div class="card-body">
+        <!-- Add Remove Icon -->
+        <a href="{% url 'remove_address' ad.id %}" class="text-danger position-absolute" style="top: 10px; right: 10px;" title="Remove Address">
+            <i class="fas fa-times-circle fa-lg"></i>
+        </a>
+       <h3>Address {{forloop.counter}}</h3>
+       <p><b>Name:</b> {{ad.name}}</p>
+       <p><b>Locality:</b> {{ad.locality}}</p>
+       <p><b>City:</b> {{ad.city}}</p>
+       <p><b>State:</b> {{ad.state}}</p>
+       <p><b>Zip Code:</b> {{ad.zipcode}}</p>
+      </div>
+     </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="col-12">
+      <div class="alert alert-primary" role="alert">
+        <strong>No address found.</strong> Please <a href="{% url 'profile' %}" class="alert-link">add your address details in profile.</a>
+      </div>
+    </div>
+{% endif %}
+   </div>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

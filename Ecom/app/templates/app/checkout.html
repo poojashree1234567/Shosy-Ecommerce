@@ -1,0 +1,96 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Buy Now{% endblock title %}
+{% block main-content %}
+<div class="container">
+ <div class="row mt-5">
+  <div class="col-sm-6">
+    <h4>Order Summary</h4>
+    <hr>
+    {% for item in cartitems %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{item.product.title}}</h5>
+          <p>Quantity: {{item.quantity}}</p>
+          <p class="fw-bold">Price: {{item.total_cost}}</p>
+          <div class="d-flex justify-content-between cart-item">
+            <a href="#" class="btn btn-sm btn-secondary mr-3 remove-cart" pid="{{item.product.id}}">Remove Item</a></div>
+        </div>
+      </div>
+    {% endfor %}
+    <p class="fw-bold">Total Cost + Rs.70 = {{totalamount}}</p>
+    <small>Term and Condition: Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, ullam saepe! Iure optio repellat dolor velit, minus rem. Facilis cumque neque numquam laboriosam, accusantium adipisci nisi nihil in et quis?</small>
+  </div>
+  <div class="col-sm-4 offset-sm-1">
+    <h4>Select Shipping Address</h4>
+    {% if address %}
+    <hr>
+    <form action="/paymentdone" id="myform">
+      {% for addrs in address %}
+      <div class="card">
+        <div class="card-body">
+        <h5>{{addrs.name}}</h5>
+        <p>{{addrs.locality}},{{addrs.city}},{{addrs.state}} - {{addrs.zipcode}}</p>
+        </div>
+      </div>
+        <div class="form-check mt-2 mb-5">
+          <input class="form-check-input" type="radio" value="{{addrs.id}}" name="custid" id="custaddress{{forloop.counter}}">
+          <label class="form-check-label fw-bold" for="custaddress{{forloop.counter}}">
+            Address: {{forloop.counter}} </label>
+        </div>
+      {% endfor %}
+        <div class="text-end">
+          <!-- PayPal Button Container -->
+          <div id="paypal-button-container"></div>
+          <!-- <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button> -->
+        </div>
+      </form>
+    {% else %}
+      <p class="text-danger">No address found. Please <a href="{% url 'address' %}">add an address</a> to proceed.</p>
+    {% endif %}
+    </div>
+  </div>
+  
+</div>
+{% endblock main-content %}
+
+{% block payment-gateway %} 
+<!-- Include PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=AezBdtpStW8pDVu6OgW5oH-jd3z4vAedZlRQWzUX6HymnkhN8lQr5LRJ_Yx5zGjXu1AjIX_VZijFiuPE&currency=USD"></script>
+
+<script>
+  paypal.Buttons({
+      // Set up the transaction
+      createOrder: function (data, actions) {
+          return actions.order.create({
+              purchase_units: [{
+                  amount: {
+                      value: '10.00' // Replace with your transaction amount
+                  }
+              }]
+          });
+      },
+
+      // Finalize the transaction on approval
+      onApprove: function (data, actions) {
+          return actions.order.capture().then(function (details) {
+              alert('Transaction completed by ' + details.payer.name.given_name);
+              document.getElementById('myform').submit();
+
+          });
+      },
+
+      // Handle cancellations
+      onCancel: function (data) {
+          alert('Payment canceled. Please try again.');
+      },
+
+      // Handle errors
+      onError: function (err) {
+          console.error('An error occurred during the transaction:', err);
+      }
+  }).render('#paypal-button-container'); // Render the button into #paypal-button-container
+</script>
+
+
+{% endblock payment-gateway %}
