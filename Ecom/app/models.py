@@ -44,7 +44,7 @@ class Customer(models.Model):
     
 CATEGORY_CHOICES = {
     ('mobile', 'Mobile'),
-    ('electronics', 'Electronics'),
+    ('laptops', 'laptops'),
     ('top wear', 'Top Wear'),
     ('bottom wear', 'Bottom Wear'),
     ('glasses','Glasses'),

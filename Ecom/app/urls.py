@@ -26,6 +26,13 @@ urlpatterns = [
     path('orders/', views.orders, name='orders'),
     path('mobile/', views.mobile, name='mobile'),
     path('mobile/<slug:data>', views.mobile, name='mobiledata'),
+    path('laptop/', views.laptop, name='laptop'),
+    path('laptop/<slug:data>', views.laptop, name='laptopdata'),
+    path('topwear/', views.topwear, name='topwear'),
+    path('topwear/<str:data>/', views.topwear, name='topweardata'),
+    path('bottomwear/', views.bottomwear, name='bottomwear'),
+    path('bottomwear/<str:data>/', views.bottomwear, name='bottomweardata'),
+
     path('checkout/', views.checkout, name='checkout'),
     path('paymentdone/', views.payment_done, name='paymentdone'),
     # path('payment-success/', views.payment_success, name='payment_success'),

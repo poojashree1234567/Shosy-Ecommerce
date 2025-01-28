@@ -241,13 +241,84 @@ def mobile(request, data=None):
     elif data in 'above':
         mobiles = Product.objects.filter(category='mobile', discount_price__gt=10000)
     else:
-        mobiles = Product.objects.filter(category='mobile')  # Handle unexpected data values gracefully
+        mobiles =  Product.objects.none()
+
+        print("Fetched Mobiles:", mobiles) 
 
     totalitem=0
     if request.user.is_authenticated:
             totalitem = len(Cart.objects.filter(user=request.user))
     context = {'mobiles': mobiles, 'data': data,'totalitem':totalitem}
     return render(request, 'app/mobile.html', context)
+
+@login_required
+def laptop(request, data=None):
+    # Fetch products based on filter
+    if data is None:
+        laptop = Product.objects.filter(category='laptops')
+    elif data in ['Games', 'Lenovo', 'Tv', 'Others']:
+        laptop = Product.objects.filter(category='laptops', brand=data)
+    elif data in 'below':
+        laptop = Product.objects.filter(category='laptops', discount_price__lt=10000)
+    elif data in 'above':
+        laptop = Product.objects.filter(category='laptops', discount_price__gt=10000)
+    else:
+        laptop =  Product.objects.none()
+    # Get total items in cart
+    totalitem = 0
+    if request.user.is_authenticated:
+        totalitem = Cart.objects.filter(user=request.user).count()
+
+        print("Fetched lap:", laptop) 
+    # Context for template rendering
+    context = {
+        'laptop': laptop,
+        'data': data,
+        'totalitem': totalitem
+    }
+    return render(request, 'app/laptop.html', context)
+
+@login_required
+def topwear(request, data=None):
+    if data is None:
+        topwear = Product.objects.filter(category='top wear')
+    elif data in ['Shirt', 'T-shirt', 'Hoodie']:
+        topwear = Product.objects.filter(category='top wear', brand=data)
+    elif data == 'below':
+        topwear = Product.objects.filter(category='top wear', discount_price__lt=1000)
+    elif data == 'above':
+        topwear = Product.objects.filter(category='top wear', discount_price__gt=1000)
+    else:
+        topwear = Product.objects.none()  # Handle unexpected data values gracefully
+
+        print("Fetched tw:", topwear) 
+    totalitem = 0
+    if request.user.is_authenticated:
+        totalitem = Cart.objects.filter(user=request.user).count()
+
+    context = {'topwear': topwear, 'data': data, 'totalitem': totalitem}
+    return render(request, 'app/topwear.html', context)
+
+@login_required
+def bottomwear(request, data=None):
+    if data is None:
+        bottomwear = Product.objects.filter(category='bottom wear')
+    elif data in ['Jeans', 'Trousers', 'Shorts']:
+        bottomwear = Product.objects.filter(category='bottom wear', brand=data)
+    elif data == 'below':
+        bottomwear = Product.objects.filter(category='bottom wear', discount_price__lt=1500)
+    elif data == 'above':
+        bottomwear = Product.objects.filter(category='bottom wear', discount_price__gt=1500)
+    else:
+        bottomwear = Product.objects.none()
+
+    totalitem = 0
+    if request.user.is_authenticated:
+        totalitem = Cart.objects.filter(user=request.user).count()
+
+    context = {'bottomwear': bottomwear, 'data': data, 'totalitem': totalitem}
+    return render(request, 'app/bottomwear.html', context)
+
 
 class CustomerRegisterationView(View):
     def get(self,request):

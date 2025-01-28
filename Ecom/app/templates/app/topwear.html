@@ -1,0 +1,55 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Buy Top Wear{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+      <!-- Sidebar for Top Wear Filters -->
+      <div class="col-sm-3">
+        <div class="list-group shadow">
+            <a href="{% url 'topwear' %}" class="list-group-item list-group-item-action {% if not data %}active{% endif %}">
+              All Top Wear
+            </a>
+            <a href="{% url 'topweardata' 'Shirt' %}" class="list-group-item list-group-item-action {% if data == 'Shirt' %}active{% endif %}">
+              Shirt
+            </a>
+            <a href="{% url 'topweardata' 'T-shirt' %}" class="list-group-item list-group-item-action {% if data == 'T-shirt' %}active{% endif %}">
+              T-shirt
+            </a>
+            <a href="{% url 'topweardata' 'Hoodie' %}" class="list-group-item list-group-item-action {% if data == 'Hoodie' %}active{% endif %}">
+              Hoodie
+            </a>
+            <a href="{% url 'topweardata' 'below' %}" class="list-group-item list-group-item-action {% if data == 'below' %}active{% endif %}">
+                Below Rs.1,000
+            </a>
+            <a href="{% url 'topweardata' 'above' %}" class="list-group-item list-group-item-action {% if data == 'above' %}active{% endif %}">
+                Above Rs.1,000
+            </a>
+            <!-- <p>Total Products: {{ topwear|length }}</p> -->
+
+        </div>
+      </div>
+      <!-- Products Grid -->
+      <div class="col-sm-9">
+        <div class="row">
+          {% for product in topwear %}
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card product-card shadow-sm">
+              <a href="{% url 'product-detail' product.id %}" class="btn p-0">
+                <img src="{{ product.product_image.url }}" class="card-img-top" alt="{{ product.title }}" height="300">
+                <div class="card-body text-center">
+                  <h6 class="card-title fw-bold">{{ product.title }}</h6>
+                  <p class="card-text">
+                    <span class="text-success fw-bold">Rs. {{ product.discount_price }}</span>
+                    <small class="text-muted text-decoration-line-through">Rs. {{ product.selling_price }}</small>
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main-content %}

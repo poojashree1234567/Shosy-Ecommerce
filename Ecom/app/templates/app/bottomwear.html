@@ -1,0 +1,55 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Bottom Wear{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+      <!-- Sidebar for Bottom Wear Filters -->
+      <div class="col-sm-3">
+        <div class="list-group shadow">
+            <a href="{% url 'bottomwear' %}" class="list-group-item list-group-item-action {% if not data %}active{% endif %}">
+              All Bottom Wear
+            </a>
+            <a href="{% url 'bottomweardata' 'Jeans' %}" class="list-group-item list-group-item-action {% if data == 'Jeans' %}active{% endif %}">
+              Jeans
+            </a>
+            <a href="{% url 'bottomweardata' 'Trousers' %}" class="list-group-item list-group-item-action {% if data == 'Trousers' %}active{% endif %}">
+              Trousers
+            </a>
+            <a href="{% url 'bottomweardata' 'Shorts' %}" class="list-group-item list-group-item-action {% if data == 'Shorts' %}active{% endif %}">
+              Shorts
+            </a>
+            <a href="{% url 'bottomweardata' 'below' %}" class="list-group-item list-group-item-action {% if data == 'below' %}active{% endif %}">
+                Below Rs.1,000
+              </a>
+              <a href="{% url 'bottomweardata' 'above' %}" class="list-group-item list-group-item-action {% if data == 'above' %}active{% endif %}">
+                Above Rs.1,000
+              </a>
+              
+
+          </div>
+      </div>
+      <!-- Products Grid -->
+      <div class="col-sm-9">
+        <div class="row">
+          {% for product in bottomwear %}
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card product-card shadow-sm">
+              <a href="{% url 'product-detail' product.id %}" class="btn p-0">
+                <img src="{{ product.product_image.url }}" class="card-img-top" alt="{{ product.title }}" height="300">
+                <div class="card-body text-center">
+                  <h6 class="card-title fw-bold">{{ product.title }}</h6>
+                  <p class="card-text">
+                    <span class="text-success fw-bold">Rs. {{ product.discount_price }}</span>
+                    <small class="text-muted text-decoration-line-through">Rs. {{ product.selling_price }}</small>
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main-content %}
